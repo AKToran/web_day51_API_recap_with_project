@@ -1,8 +1,8 @@
-function removeActiveClass(){
-  const activeBtns = document.getElementsByClassName('active');
+function removeActiveClass() {
+  const activeBtns = document.getElementsByClassName("active");
 
-  for(let btn of activeBtns){
-    btn.classList.remove('active');
+  for (let btn of activeBtns) {
+    btn.classList.remove("active");
   }
 }
 
@@ -15,22 +15,23 @@ function loadCategories() {
 function loadAllVideos() {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((res) => res.json())
-    .then((data) => displayVideos(data.videos));
+    .then((data) => {
+      removeActiveClass();
+      const clickedButton = document.getElementById(`btn-all`);
+      clickedButton.classList.add("active");
+      displayVideos(data.videos);
+    });
 }
 
 const loadCategoryVideos = (id) => {
   // showLoader();
   const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
-  // console.log(url);
-
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
       removeActiveClass();
-      
       const clickedButton = document.getElementById(`btn-${id}`);
       clickedButton.classList.add("active");
-
       displayVideos(data.category);
     });
 };
@@ -51,7 +52,7 @@ function displayCategories(categories) {
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("video-container");
 
-  if(videos.length == 0) {
+  if (videos.length == 0) {
     videoContainer.innerHTML = `
     <div class="py-20 col-span-full flex flex-col justify-center items-center text-center">
         <img class="w-[120px]" src="assets/Icon.png" alt="" />
@@ -67,7 +68,7 @@ const displayVideos = (videos) => {
 
   videos.forEach((video) => {
     const div = document.createElement("div");
-    div.innerHTML =  `
+    div.innerHTML = `
     <div class="card bg-base-100">
         <figure class="relative">
           <img class="h-[200px] w-full object-cover rounded-lg"
